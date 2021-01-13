@@ -1,0 +1,135 @@
+ESERCIZIO DB-HOTEL QUERIES
+
+- Selezionare tutte le stanze del primo piano
+
+SELECT *
+FROM `stanze`
+WHERE `floor` = 1;
+
+(Seleziona tutte le colonne della tabella stanze a condizione che la colonna floor abbia come va lore interno 1 che si riferisce per l'appunto al primo piano della struttura)
+
+
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+
+
+- Seleziona tutte le prenotazioni precedenti a maggio 2018
+
+SELECT * 
+FROM `prenotazioni`
+WHERE `created_at` < '2018-05-01';
+
+(Seleziona tutte le colonne della tabella prenotazioni a condizione che la colonna created_at abbia un valore precedente al mese di maggio dell'anno 2018)
+
+
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+
+
+- Seleziona tutti gli ospiti che hanno più di 20 anni (al momento dell’esecuzione della query)
+
+SELECT *
+FROM `ospiti`
+WHERE `date_of_birth` > NOW() - INTERVAL 20 YEAR
+
+(Seleziona tutte le colonne della tabella ospiti a condizione che la colonna date_of_birth sia maggiore dell'intervallo di tempo che va dal momento attuale a 20 anni fa = la persona deve avere venti anni compiuti)
+
+
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+
+
+- Seleziona tutti gli ospiti il cui nome inizia con la E
+
+SELECT * 
+FROM `ospiti`
+WHERE `name` LIKE 'e%';
+
+(Seleziona tutte le colonne della tabella ospiti a condizione che il dato nella colonna name cominci con la lettera e)
+
+
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+
+
+- Calcola il totale degli ordini accepted
+
+SELECT COUNT(`status`) AS `numero_pag_accettati`
+FROM `pagamenti`
+WHERE `status` = 'accepted';
+
+(Calcola e riporta in una colonna chiamata convenzionalmente numero_pag_accettati il numero di elementi nella tabella pagamenti alla colonna status il cui status sia uguale ad accepted)
+
+
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+
+
+- Qual è il prezzo massimo pagato?
+
+SELECT MAX(`price`) AS `prezzo_più_alto`
+FROM `pagamenti`;
+
+(Calcola con la funzione max() il il valore massimo contenuto nella tabella pagamenti alla colonna price e riporta il valore in una colonna chiamata convenzionalmente `prezzo_più_alto`)
+
+
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+
+
+- Seleziona gli ospiti riconosciuti con patente e nati nel 1975
+
+SELECT * 
+FROM `ospiti`
+WHERE `document_type` = 'Driver License'
+AND YEAR(date_of_birth) = '1975';
+
+(Seleziona dalla tabella ospiti tutte le colonne contenenti il valore Driver License alla colonna document_type E il valore 1975 alla colonna date_of_birth)
+
+
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+
+
+- Quanti posti letto ha l’hotel in totale?
+
+SELECT SUM(`beds`) AS `totale_posti_letto`
+FROM `stanze`;
+
+(Fai la somma per ottenere il totale dei valori nella tabella stanze alla voce beds e colloca il valore ottenuto in una colonna chiamata convenzionalmente totale_posti_letto)
+
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+
+
+- Somma i prezzi dei pagamenti raggruppandoli per status
+
+SELECT SUM(`price`), `status` AS `totale_status_prezzi`
+FROM `pagamenti`
+GROUP BY `status`
+ORDER BY `status` ASC
+
+(Calcola la somma dei prezzi nella tabella pagamenti alla colonna prezzi raggruppa poi i valori ottenuti sulla base dei diversi valori contenuti nella colonna status e ordinali in maniera ascendente (alfabetica))
+(Status dopo la funzione di somma crea la colonna in cui verranno riporti i vari status affiancata a quella in cui si prende visione della somma dei prezzi per ogni status diverso, e l'abbiamo chiamata convenzionalmente totale_status_prezzi)
+
+
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+
+
+
+- (EXTRA) conteggio di quanti pagamenti nei vari tipi di status
+
+ SELECT COUNT(`id`), `status` AS `status_counts`
+  FROM `pagamenti`
+  GROUP BY `status`
+  ORDER BY `status` ASC
