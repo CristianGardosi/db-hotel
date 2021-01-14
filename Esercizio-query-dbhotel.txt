@@ -32,7 +32,7 @@ WHERE `created_at` < '2018-05-01';
 
 SELECT *
 FROM `ospiti`
-WHERE `date_of_birth` > NOW() - INTERVAL 20 YEAR
+WHERE `date_of_birth` < NOW() - INTERVAL 20 YEAR
 
 (Seleziona tutte le colonne della tabella ospiti a condizione che la colonna date_of_birth sia maggiore dell'intervallo di tempo che va dal momento attuale a 20 anni fa = la persona deve avere venti anni compiuti)
 
@@ -112,7 +112,7 @@ FROM `stanze`;
 
 - Somma i prezzi dei pagamenti raggruppandoli per status
 
-SELECT SUM(`price`), `status` AS `totale_status_prezzi`
+SELECT SUM(`price`), `status` AS `tot_price_for_status`
 FROM `pagamenti`
 GROUP BY `status`
 ORDER BY `status` ASC
@@ -123,7 +123,6 @@ ORDER BY `status` ASC
 
 
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
-
 
 
 
