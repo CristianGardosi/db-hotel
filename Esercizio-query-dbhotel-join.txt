@@ -53,18 +53,47 @@ WHERE `prenotazioni`.`created_at` LIKE '2018-05%' ;
 
 - Fai la somma di tutti i prezzi delle prenotazioni per le stanze del primo piano
 
-SELECT SUM(`pagamenti`.`price`), `prenotazioni`.`id`, `stanze`.`floor`
-FROM `pagamenti`
-INNER JOIN `prenotazioni`
-ON `pagamenti`.`prenotazione_id` = `prenotazioni`.`id`
-INNER JOIN `stanze`
-ON `prenotazioni`.`stanza_id` = `stanze`.`id`
-GROUP BY `pagamenti`.`price`
-WHERE `stanze`.`floor` = 1;
+SELECT SUM(`pagamenti`.`price`) AS `somma_pagamenti`, `stanze`.`floor` 
+FROM `pagamenti` 
+INNER JOIN `prenotazioni` 
+ON `pagamenti`.`prenotazione_id` = `prenotazioni`.`id` 
+INNER JOIN `stanze` 
+ON `prenotazioni`.`stanza_id` = `stanze`.`id` 
+WHERE `stanze`.`floor` = 1 
+
+(Eseguo la somma di tutti i valori nella colonna Price della tabella pagamenti con alias somma_pagamenti e seleziono la colonna floor della tabella stanze, partendo da pagamenti effettuo due inner join con relativi on per collegare PK e FK in modo da passare attraverso la tabella prenotazioni fino a raggiungere la tabella stanze, infine pongo la mia condizione ovvero che il valore posto nella colonna floor sia 1)
+
+
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 
 
 
 - Prendi i dati di fatturazione (name, lastname e address) per la prenotazione con id=7
 
+SELECT `paganti`.`name`, `paganti`.`lastname`, `paganti`.`address`, `prenotazioni`.`id`
+FROM `paganti`
+INNER JOIN `pagamenti`
+ON `paganti`.`id` = `pagamenti`.`pagante_id`
+INNER JOIN `prenotazioni`
+ON `pagamenti`.`prenotazione_id` = `prenotazioni`.`id`
+WHERE `prenotazioni`.`id` = 7;
+
+(Seleziono le colonne che mi servono dalla tabella paganti e la colonna id che poi utilizzo nel where per dettare la condizione dalla tabella prenotazioni; partendo con il from da paganti mi sposto utilizzando inner joint e on per lavorare con PK ed FK fino alla tabella prenotazioni passando da quella pagamenti che si trova tra le due, una volta giunto al punto pongo la condizione ovvero che l'id di prenotazione sia = a 7)
+
+
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+
+
 - Le stanze sono state tutte prenotate almeno una volta? (Visualizzare le stanze non ancora prenotate)
+
+SELECT * 
+FROM `stanze` 
+LEFT JOIN `prenotazioni` 
+ON `stanze`.`id` = `prenotazioni`.`stanza_id` 
+WHERE `prenotazioni`.`id` IS NULL 
+
+(Seleziono tutte le colonne della tabella stanze a cui affianco con left joint e il relativo on su PK ed FK la tabella prenotazioni (E' NECESSARIO UTILIZZARE LEFT JOIN E NON INNER JOIN IN QUANTO LAVORO CERCANDO DEI VALORI NULL). Infine pongo la mia condizione ovvero che sulla stanza non siano mai state effettuate prenotazioni, in questo caso cercando id di prenotazione NULL)
