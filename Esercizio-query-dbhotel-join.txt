@@ -12,7 +12,9 @@ HAVING `prenotaz_per_ospite` > 2
 (Eseguo il calcolo di quante volte ho lo stesso valore nella colonna ospite_id della tabella prenotazioni_has_ospiti e seleziono anche i dati dalla tabella ospiti relativi al nominativo dell'ospite. Collego le due tabelle con inner join/on e in group by specifico di volere raggruppare il risultato del calcolo eseguito con count nella relativa colonna. Per ultima cosa con una versione short di having count pongo la mia condizione, ovvero che il singolo ospite abbia effettuato più di due prenotazioni)
 
 
+
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
 
 
 - Stampare tutti gli ospiti per ogni prenotazione
@@ -25,7 +27,9 @@ ON `prenotazioni_has_ospiti`.`ospite_id` = `ospiti`.`id`;
 (Prendo la col prenotazione_id dalla tabella prenotazioni_has_ospiti (PIVOT tra prenotazioni e ospiti) oltre a name e lastname dalla tabella ospiti per poi associare l'id di prenotazione al nome dell'ospite corrispondente. Come tabella principale nel from ho prenotazioni_has_ospiti e la collego con un inner join a ospiti da cui ho preso le colonne che mi servivano nella select, con on effettuo il collegamento vero e proprio tra PK e FK delle due tabelle interessate dalla relazione)
 
 
+
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
 
 
 - Stampare Nome, Cognome, Prezzo e Pagante per tutte le prenotazioni fatte a Maggio 2018
@@ -38,15 +42,28 @@ INNER JOIN `prenotazioni`
 ON `pagamenti`.`prenotazione_id` = `prenotazioni`.`id` 
 WHERE `prenotazioni`.`created_at` LIKE '2018-05%' ;
 
+(Seleziono le colonne name e last name dalla tabella paganti quella price dalla tabella pagamenti e quella created_at dalla tabella prenotazioni per avere i dati che mi servono. Parto con il from da paganti e mi sposto con due inner join e relativo on nelle due tabelle da cui ho preso gli altri dati lavorando con le PK e FK, infine pongo la condizione richiesta utilizzando LIKE nella sua funzionalità di ricerca di tutti valori che cominciano con una specifica serie di caratteri, in questo caso 2018-05)
+
+
 
 |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
 
 
-(Seleziono le colonne name e last name dalla tabella paganti quella price dalla tabella pagamenti e quella created_at dalla tabella prenotazioni per avere i dati che mi servono. Parto con il from da paganti e mi sposto con due inner join e relativo on nelle due tabelle da cui ho preso gli altri dati lavorando con le PK e FK, infine pongo la condizione richiesta utilizzando LIKE nella sua funzionalità di ricerca di tutti valori che cominciano con una specifica serie di caratteri, in questo caso 2018-05)
-
 
 - Fai la somma di tutti i prezzi delle prenotazioni per le stanze del primo piano
+
+SELECT SUM(`pagamenti`.`price`), `prenotazioni`.`id`, `stanze`.`floor`
+FROM `pagamenti`
+INNER JOIN `prenotazioni`
+ON `pagamenti`.`prenotazione_id` = `prenotazioni`.`id`
+INNER JOIN `stanze`
+ON `prenotazioni`.`stanza_id` = `stanze`.`id`
+GROUP BY `pagamenti`.`price`
+WHERE `stanze`.`floor` = 1;
+
+
+
 
 - Prendi i dati di fatturazione (name, lastname e address) per la prenotazione con id=7
 
